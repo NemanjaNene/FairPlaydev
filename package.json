@@ -1,0 +1,24 @@
+{
+  "name": "fairplay-dev-tests",
+  "version": "1.0.0",
+  "description": "Cypress E2E tests for FairPlay DEV environment",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "cypress run",
+    "test:login": "cypress run --spec 'cypress/e2e/auth/**/*.cy.js'",
+    "test:products": "cypress run --spec 'cypress/e2e/products/**/*.cy.js'",
+    "test:purchase": "cypress run --spec 'cypress/e2e/purchase/**/*.cy.js'",
+    "test:account": "cypress run --spec 'cypress/e2e/account/**/*.cy.js'",
+    "test:referral": "cypress run --headed --spec 'cypress/e2e/referral/**/*.cy.js' --browser chrome",
+    "test:headed": "cypress run --headed",
+    "test:chrome": "cypress run --browser chrome",
+    "clean": "rm -rf cypress/screenshots cypress/videos"
+  },
+  "devDependencies": {
+    "cypress": "^15.11.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
