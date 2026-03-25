@@ -63,9 +63,10 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     cy.url({ timeout: 15000 }).should('include', '/payment');
     cy.wait(2000);
 
+    cy.fillPaymentCardholderName(testCard.name);
     cy.contains('PAY NOW').click();
 
-    cy.url({ timeout: 30000 }).should('include', '/successfull-purchase');
+    cy.urlShouldIncludePurchaseSuccess(30000);
     cy.contains('CONGRATULATION').should('be.visible');
     cy.contains('Thank you for your purchase').should('be.visible');
     cy.contains('GO TO DASHBOARD').should('be.visible');
@@ -84,9 +85,10 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     cy.url({ timeout: 15000 }).should('include', '/payment');
     cy.wait(2000);
 
+    cy.fillPaymentCardholderName(testCard.name);
     cy.contains('PAY NOW').click();
 
-    cy.url({ timeout: 30000 }).should('include', '/successfull-purchase');
+    cy.urlShouldIncludePurchaseSuccess(30000);
     cy.contains('GO TO DASHBOARD').click();
 
     cy.url({ timeout: 15000 }).should('include', '/dashboard');
@@ -107,7 +109,9 @@ describe('Complete Purchase Flow - Flex Subscription', () => {
 
     cy.contains('FAIRPLAY FLEX').scrollIntoView();
     cy.wait(1500);
-    cy.contains('€ 30').click({ force: true });
+    cy.contains('12').parent().parent().within(() => {
+      cy.contains('€ 30').click({ force: true });
+    });
     cy.wait(500);
     cy.contains('PLAY THE MARKET').click();
 
@@ -124,16 +128,19 @@ describe('Complete Purchase Flow - Flex Subscription', () => {
 
     cy.contains('FAIRPLAY FLEX').scrollIntoView();
     cy.wait(1500);
-    cy.contains('€ 30').click({ force: true });
+    cy.contains('12').parent().parent().within(() => {
+      cy.contains('€ 30').click({ force: true });
+    });
     cy.wait(500);
     cy.contains('PLAY THE MARKET').click();
 
     cy.url({ timeout: 15000 }).should('include', '/payment');
     cy.wait(2000);
 
+    cy.fillPaymentCardholderName('Test User');
     cy.contains('PAY NOW').click();
 
-    cy.url({ timeout: 30000 }).should('include', '/successfull-purchase');
+    cy.urlShouldIncludePurchaseSuccess(30000);
     cy.contains('CONGRATULATION').should('be.visible');
     cy.contains('Thank you for your purchase').should('be.visible');
   });

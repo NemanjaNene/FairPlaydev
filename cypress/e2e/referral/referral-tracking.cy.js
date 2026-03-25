@@ -40,7 +40,7 @@ describe('Referral Code Tracking', () => {
     });
   });
 
-  // ========== TEST 3: Persistencija cookie-ja kroz login ==========
+  // ========== TEST 3 ==========
   it('should persist cookie and localStorage through login', () => {
     cy.visitDev(referralUrl);
     cy.wait(3000);
@@ -108,18 +108,18 @@ describe('Referral Purchase - PAID Request Verification', () => {
     cy.intercept('POST', '**/paid*').as('paidRequest');
     cy.intercept('POST', '**/*paid*').as('paidRequest2');
 
-    cy.contains('BUY BUNDLES').scrollIntoView();
+    cy.contains('BUY BUNDLES', { timeout: 25000 }).scrollIntoView();
     cy.wait(1000);
     cy.screenshot('08-buy-bundles-section');
 
-    cy.contains('€35').parent().parent().parent().contains('BUY').click();
+    cy.contains('20 GB').scrollIntoView();
+    cy.contains(/€\s*35(?:[^0-9]|$)/).parent().parent().parent().contains('BUY').click();
 
     cy.url({ timeout: 15000 }).should('include', '/payment');
     cy.wait(5000);
     cy.screenshot('09-payment-page');
 
-    cy.contains('Name and Surname of card holder').parent().find('input').clear().type('Test User');
-    cy.wait(500);
+    cy.fillPaymentCardholderName('Test User');
 
     cy.contains('PAY NOW').click();
     cy.screenshot('10-after-pay-now');
