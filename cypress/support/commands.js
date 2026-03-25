@@ -14,6 +14,41 @@ Cypress.Commands.add('fillPaymentCardholderName', (name = 'Test User') => {
   cy.wait(500);
 });
 
+Cypress.Commands.add('fillStripeTestCard', (opts = {}) => {
+  const number = opts.number || '4242424242424242';
+  const expiry = String(opts.expiry || '1234').replace(/\D/g, '');
+  const cvv = opts.cvv || '123';
+
+  const typeInIframe = (index, value) => {
+    cy.get('iframe[src*="js.stripe.com"]', { timeout: 20000 })
+      .eq(index)
+      .should('be.visible')
+      .then(($iframe) => {
+        const doc = $iframe[0].contentDocument;
+        expect(doc, 'Stripe iframe document').not.to.be.null;
+        const input = doc.querySelector('input');
+        expect(input, 'Stripe iframe input').not.to.be.null;
+        cy.wrap(input)
+          .click({ force: true })
+          .clear({ force: true })
+          .type(value, { force: true });
+      });
+  };
+
+  cy.get('iframe[src*="js.stripe.com"]', { timeout: 20000 }).then(($iframes) => {
+    expect($iframes.length, 'Stripe iframe count').to.be.at.least(1);
+    if ($iframes.length >= 3) {
+      typeInIframe(0, number);
+      typeInIframe(1, expiry);
+      typeInIframe(2, cvv);
+    } else {
+      typeInIframe(0, number);
+      if ($iframes.length > 1) typeInIframe(1, expiry);
+      if ($iframes.length > 2) typeInIframe(2, cvv);
+    }
+  });
+});
+
 Cypress.Commands.add('urlShouldIncludePurchaseSuccess', (timeout = 30000) => {
   cy.url({ timeout }).should((url) => {
     const ok =

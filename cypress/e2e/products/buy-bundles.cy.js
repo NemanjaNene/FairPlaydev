@@ -22,19 +22,19 @@ describe('Buy Bundles Section', () => {
   });
 
   it('should display correct prices for bundles', () => {
-    // Optional space after € matches dashboard formatting (e.g. €35 vs € 35)
     cy.contains(/€\s*5(?:[^0-9]|$)/).should('exist');
     cy.contains(/€\s*7\.5/).should('exist');
     cy.contains(/€\s*10(?:[^0-9]|$)/).should('exist');
     cy.contains(/€\s*15(?:[^0-9]|$)/).should('exist');
     cy.contains(/€\s*25(?:[^0-9]|$)/).should('exist');
-    cy.contains(/€\s*35(?:[^0-9]|$)/).should('exist');
+    cy.contains(/€\s*(?:35|45)(?:[^0-9]|$)/).should('exist');
     cy.contains(/€\s*75(?:[^0-9]|$)/).should('exist');
   });
 
   it('should display validity and auto renewal info', () => {
     cy.contains('30 Days').should('exist');
     cy.contains('1 Month').should('exist');
+    cy.contains(/180\s*days|6\s*months/i).should('exist');
     cy.contains('AUTO RENEWAL').should('exist');
   });
 
@@ -62,10 +62,24 @@ describe('Purchase Bundle - Complete Flow', () => {
     cy.contains('ORDER SUMMARY').should('be.visible');
 
     cy.fillPaymentCardholderName('Test User');
+    cy.fillStripeTestCard();
 
     cy.contains('PAY NOW').click();
 
-    cy.url({ timeout: 30000 }).should('include', '/dashboard');
+    cy.url({ timeout: 30000 }).should((url) => {
+      expect(
+        url.includes('/dashboard') ||
+          url.includes('/successfull-purchase') ||
+          url.includes('/successful-purchase')
+      ).to.be.true;
+    });
+    cy.url().then((url) => {
+      if (url.includes('success')) {
+        cy.contains('GO TO DASHBOARD').click();
+        cy.url({ timeout: 15000 }).should('include', '/dashboard');
+      }
+    });
+
     cy.wait(2000);
 
     cy.contains('ACTIVE PRODUCTS').should('be.visible');

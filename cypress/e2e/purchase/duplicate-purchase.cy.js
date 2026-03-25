@@ -12,9 +12,9 @@ describe('Duplicate Purchase Prevention', () => {
     cy.wait(500);
     cy.contains('GO TO SECURE CHECKOUT').click();
 
-    cy.contains(/Another Unlimited plan is currently active|Unlimited.*(already active|currently active)/i, {
-      timeout: 15000
-    }).should('be.visible');
+    cy.get('body', { timeout: 15000 })
+      .invoke('text')
+      .should('match', /Another Unlimited plan is currently active/i);
     cy.url().should('not.include', '/payment');
   });
 

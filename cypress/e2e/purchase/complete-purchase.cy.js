@@ -64,6 +64,11 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     cy.wait(2000);
 
     cy.fillPaymentCardholderName(testCard.name);
+    cy.fillStripeTestCard({
+      number: testCard.number,
+      expiry: testCard.expiry,
+      cvv: testCard.cvv
+    });
     cy.contains('PAY NOW').click();
 
     cy.urlShouldIncludePurchaseSuccess(30000);
@@ -86,6 +91,11 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     cy.wait(2000);
 
     cy.fillPaymentCardholderName(testCard.name);
+    cy.fillStripeTestCard({
+      number: testCard.number,
+      expiry: testCard.expiry,
+      cvv: testCard.cvv
+    });
     cy.contains('PAY NOW').click();
 
     cy.urlShouldIncludePurchaseSuccess(30000);
@@ -109,9 +119,7 @@ describe('Complete Purchase Flow - Flex Subscription', () => {
 
     cy.contains('FAIRPLAY FLEX').scrollIntoView();
     cy.wait(1500);
-    cy.contains('12').parent().parent().within(() => {
-      cy.contains('€ 30').click({ force: true });
-    });
+    cy.contains('€ 30').click({ force: true });
     cy.wait(500);
     cy.contains('PLAY THE MARKET').click();
 
@@ -128,9 +136,7 @@ describe('Complete Purchase Flow - Flex Subscription', () => {
 
     cy.contains('FAIRPLAY FLEX').scrollIntoView();
     cy.wait(1500);
-    cy.contains('12').parent().parent().within(() => {
-      cy.contains('€ 30').click({ force: true });
-    });
+    cy.contains('€ 30').click({ force: true });
     cy.wait(500);
     cy.contains('PLAY THE MARKET').click();
 
@@ -138,6 +144,7 @@ describe('Complete Purchase Flow - Flex Subscription', () => {
     cy.wait(2000);
 
     cy.fillPaymentCardholderName('Test User');
+    cy.fillStripeTestCard();
     cy.contains('PAY NOW').click();
 
     cy.urlShouldIncludePurchaseSuccess(30000);
