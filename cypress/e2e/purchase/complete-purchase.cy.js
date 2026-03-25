@@ -16,7 +16,7 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
 
     cy.contains("FairPlay Unlimited").scrollIntoView();
     cy.wait(1500);
-    cy.contains('€ 50').click({ force: true });
+    cy.clickPriceContainingEuros(50);
     cy.wait(500);
     cy.contains('GO TO SECURE CHECKOUT').click();
 
@@ -36,7 +36,7 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
 
     cy.contains("FairPlay Unlimited").scrollIntoView();
     cy.wait(1500);
-    cy.contains('€ 50').click({ force: true });
+    cy.clickPriceContainingEuros(50);
     cy.wait(500);
     cy.contains('GO TO SECURE CHECKOUT').click();
 
@@ -56,7 +56,7 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
 
     cy.contains("FairPlay Unlimited").scrollIntoView();
     cy.wait(1500);
-    cy.contains('€ 50').click({ force: true });
+    cy.clickPriceContainingEuros(50);
     cy.wait(500);
     cy.contains('GO TO SECURE CHECKOUT').click();
 
@@ -64,7 +64,7 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     cy.wait(2000);
 
     cy.fillPaymentCardholderName(testCard.name);
-    cy.fillStripeTestCard({
+    cy.fillPaymentTestCard({
       number: testCard.number,
       expiry: testCard.expiry,
       cvv: testCard.cvv
@@ -83,7 +83,7 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
 
     cy.contains("FairPlay Unlimited").scrollIntoView();
     cy.wait(1500);
-    cy.contains('€ 50').click({ force: true });
+    cy.clickPriceContainingEuros(50);
     cy.wait(500);
     cy.contains('GO TO SECURE CHECKOUT').click();
 
@@ -91,7 +91,7 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     cy.wait(2000);
 
     cy.fillPaymentCardholderName(testCard.name);
-    cy.fillStripeTestCard({
+    cy.fillPaymentTestCard({
       number: testCard.number,
       expiry: testCard.expiry,
       cvv: testCard.cvv
@@ -119,7 +119,7 @@ describe('Complete Purchase Flow - Flex Subscription', () => {
 
     cy.contains('FAIRPLAY FLEX').scrollIntoView();
     cy.wait(1500);
-    cy.contains('€ 30').click({ force: true });
+    cy.clickPriceContainingEuros(30);
     cy.wait(500);
     cy.contains('PLAY THE MARKET').click();
 
@@ -136,7 +136,7 @@ describe('Complete Purchase Flow - Flex Subscription', () => {
 
     cy.contains('FAIRPLAY FLEX').scrollIntoView();
     cy.wait(1500);
-    cy.contains('€ 30').click({ force: true });
+    cy.clickPriceContainingEuros(30);
     cy.wait(500);
     cy.contains('PLAY THE MARKET').click();
 
@@ -144,7 +144,7 @@ describe('Complete Purchase Flow - Flex Subscription', () => {
     cy.wait(2000);
 
     cy.fillPaymentCardholderName('Test User');
-    cy.fillStripeTestCard();
+    cy.fillPaymentTestCard();
     cy.contains('PAY NOW').click();
 
     cy.urlShouldIncludePurchaseSuccess(30000);
@@ -164,7 +164,7 @@ describe('Cancel Payment', () => {
 
     cy.contains("FairPlay Unlimited").scrollIntoView();
     cy.wait(1500);
-    cy.contains('€ 50').click({ force: true });
+    cy.clickPriceContainingEuros(50);
     cy.wait(500);
     cy.contains('GO TO SECURE CHECKOUT').click();
 

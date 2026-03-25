@@ -9,13 +9,75 @@ Cypress.Commands.add('visitDev', (path = '/') => {
   });
 });
 
+Cypress.Commands.add('clickPriceContainingEuros', (amount, options = {}) => {
+  const escaped = String(amount).replace(/\./g, '\\.');
+  const pattern = new RegExp(`€\\s*${escaped}(?:[^0-9]|$)`);
+  const chain = cy.contains(pattern);
+  if (options.first) {
+    chain.first().click({ force: true });
+  } else {
+    chain.click({ force: true });
+  }
+});
+
+Cypress.Commands.add('containsEuroPrice', (amount) => {
+  const escaped = String(amount).replace(/\./g, '\\.');
+  cy.contains(new RegExp(`€\\s*${escaped}(?:[^0-9]|$)`)).should('exist');
+});
+
 Cypress.Commands.add('fillPaymentCardholderName', (name = 'Test User') => {
   cy.contains('Name and Surname of card holder').parent().find('input').clear().type(name);
   cy.wait(500);
 });
 
+Cypress.Commands.add('fillPaymentTestCard', (opts = {}) => {
+  const number = String(opts.number || '4242424242424242').replace(/\s/g, '');
+  const cvv = opts.cvv || '123';
+  const rawExpiry = opts.expiry || '12/34';
+  const expiryForDom =
+    opts.expiryDisplay || (String(rawExpiry).includes('/') ? String(rawExpiry) : '12/34');
+  const expiryDigits = String(rawExpiry).replace(/\D/g, '');
+
+  cy.get('body', { timeout: 20000 }).then(($body) => {
+    const stripeCount = $body.find('iframe[src*="js.stripe.com"]').length;
+    if (stripeCount > 0) {
+      cy.fillStripeTestCard({ ...opts, expiry: expiryDigits });
+    } else {
+      cy.contains('Card number', { timeout: 10000 })
+        .parent()
+        .find('input')
+        .filter(':visible')
+        .first()
+        .clear({ force: true })
+        .type(number, { force: true });
+      cy.contains('Expiry date')
+        .parent()
+        .find('input')
+        .filter(':visible')
+        .first()
+        .clear({ force: true })
+        .type(expiryForDom, { force: true });
+
+      cy.get('body')
+        .find('input:visible')
+        .then(($inputs) => {
+          const el = $inputs
+            .filter((i, input) => {
+              const a = (input.getAttribute('autocomplete') || '').toLowerCase();
+              const n = (input.getAttribute('name') || '').toLowerCase();
+              return a.includes('cvc') || a.includes('csc') || n.includes('cvc');
+            })
+            .get(0);
+          if (el) {
+            cy.wrap(el).clear({ force: true }).type(cvv, { force: true });
+          }
+        });
+    }
+  });
+});
+
 Cypress.Commands.add('fillStripeTestCard', (opts = {}) => {
-  const number = opts.number || '4242424242424242';
+  const number = String(opts.number || '4242424242424242').replace(/\s/g, '');
   const expiry = String(opts.expiry || '1234').replace(/\D/g, '');
   const cvv = opts.cvv || '123';
 

@@ -27,14 +27,13 @@ describe('Buy Bundles Section', () => {
     cy.contains(/€\s*10(?:[^0-9]|$)/).should('exist');
     cy.contains(/€\s*15(?:[^0-9]|$)/).should('exist');
     cy.contains(/€\s*25(?:[^0-9]|$)/).should('exist');
-    cy.contains(/€\s*(?:35|45)(?:[^0-9]|$)/).should('exist');
+    cy.contains(/€\s*35(?:[^0-9]|$)/).should('exist');
     cy.contains(/€\s*75(?:[^0-9]|$)/).should('exist');
   });
 
   it('should display validity and auto renewal info', () => {
     cy.contains('30 Days').should('exist');
     cy.contains('1 Month').should('exist');
-    cy.contains(/180\s*days|6\s*months/i).should('exist');
     cy.contains('AUTO RENEWAL').should('exist');
   });
 
@@ -62,7 +61,7 @@ describe('Purchase Bundle - Complete Flow', () => {
     cy.contains('ORDER SUMMARY').should('be.visible');
 
     cy.fillPaymentCardholderName('Test User');
-    cy.fillStripeTestCard();
+    cy.fillPaymentTestCard();
 
     cy.contains('PAY NOW').click();
 

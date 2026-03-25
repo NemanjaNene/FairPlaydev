@@ -30,11 +30,12 @@ describe('Product Browsing', () => {
     cy.scrollTo('bottom', { duration: 2000 });
     cy.wait(1000);
 
-    cy.contains('€ 25').should('exist');
-    cy.contains('€ 30').should('exist');
-    cy.contains('€ 35').should('exist');
+    cy.containsEuroPrice(25);
+    cy.containsEuroPrice(30);
+    cy.containsEuroPrice(35);
     cy.contains('24').should('exist');
     cy.contains('12').should('exist');
+    cy.contains('6').should('exist');
   });
 
   it('should display Day Pass plans on homepage', () => {
