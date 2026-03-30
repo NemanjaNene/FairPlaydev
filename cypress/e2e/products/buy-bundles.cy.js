@@ -55,15 +55,13 @@ describe('Purchase Bundle - Complete Flow', () => {
     cy.contains(/€\s*5(?:[^0-9]|$)/).parent().parent().parent().contains('BUY').click();
 
     cy.url({ timeout: 15000 }).should('include', '/payment');
-    cy.wait(3000);
 
     cy.contains('PAYMENT DETAILS').should('be.visible');
     cy.contains('ORDER SUMMARY').should('be.visible');
 
-    cy.fillPaymentCardholderName('Test User');
-    cy.fillPaymentTestCard();
+    cy.wait(4000);
 
-    cy.contains('PAY NOW').click();
+    cy.clickPayNow();
 
     cy.url({ timeout: 30000 }).should((url) => {
       expect(

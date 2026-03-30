@@ -63,8 +63,8 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     cy.url({ timeout: 15000 }).should('include', '/payment');
     cy.wait(2000);
 
-    cy.fillPaymentCardholderName(testCard.name);
-    cy.fillPaymentTestCard({
+    cy.fillPaymentDetails({
+      name: testCard.name,
       number: testCard.number,
       expiry: testCard.expiry,
       cvv: testCard.cvv
@@ -90,8 +90,8 @@ describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     cy.url({ timeout: 15000 }).should('include', '/payment');
     cy.wait(2000);
 
-    cy.fillPaymentCardholderName(testCard.name);
-    cy.fillPaymentTestCard({
+    cy.fillPaymentDetails({
+      name: testCard.name,
       number: testCard.number,
       expiry: testCard.expiry,
       cvv: testCard.cvv
@@ -143,8 +143,7 @@ describe('Complete Purchase Flow - Flex Subscription', () => {
     cy.url({ timeout: 15000 }).should('include', '/payment');
     cy.wait(2000);
 
-    cy.fillPaymentCardholderName('Test User');
-    cy.fillPaymentTestCard();
+    cy.fillPaymentDetails({ name: 'Test User' });
     cy.contains('PAY NOW').click();
 
     cy.urlShouldIncludePurchaseSuccess(30000);

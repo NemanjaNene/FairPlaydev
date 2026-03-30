@@ -54,8 +54,8 @@ describe('Referral Code Tracking', () => {
     cy.wait(2000);
     cy.screenshot('03-login-page');
 
-    cy.get('#email').type(Cypress.env('testUserEmail'));
-    cy.get('input[type="password"]').type(Cypress.env('testUserPassword'));
+    cy.get('input[type="email"]').filter(':visible').first().clear().type(Cypress.env('testUserEmail'));
+    cy.get('input[type="password"]').filter(':visible').first().type(Cypress.env('testUserPassword'));
     cy.contains('button', 'LOG IN').click();
     cy.url({ timeout: 15000 }).should('not.include', '/auth');
     cy.screenshot('04-after-login-dashboard');
@@ -95,8 +95,8 @@ describe('Referral Purchase - PAID Request Verification', () => {
 
     cy.visitDev('/auth');
     cy.wait(2000);
-    cy.get('#email').type(Cypress.env('testUserEmail'));
-    cy.get('input[type="password"]').type(Cypress.env('testUserPassword'));
+    cy.get('input[type="email"]').filter(':visible').first().clear().type(Cypress.env('testUserEmail'));
+    cy.get('input[type="password"]').filter(':visible').first().type(Cypress.env('testUserPassword'));
     cy.contains('button', 'LOG IN').click();
     cy.url({ timeout: 15000 }).should('not.include', '/auth');
     cy.screenshot('06-logged-in');
@@ -116,12 +116,14 @@ describe('Referral Purchase - PAID Request Verification', () => {
     cy.contains(/€\s*35(?:[^0-9]|$)/).parent().parent().parent().contains('BUY').click();
 
     cy.url({ timeout: 15000 }).should('include', '/payment');
-    cy.wait(5000);
+
+    cy.contains('PAYMENT DETAILS').should('be.visible');
+    cy.contains('ORDER SUMMARY').should('be.visible');
     cy.screenshot('09-payment-page');
 
-    cy.fillPaymentCardholderName('Test User');
+    cy.wait(4000);
 
-    cy.contains('PAY NOW').click();
+    cy.clickPayNow();
     cy.screenshot('10-after-pay-now');
 
     cy.wait('@paidRequest', { timeout: 30000 }).then((interception) => {

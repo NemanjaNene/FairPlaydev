@@ -30,6 +30,12 @@ Cypress.Commands.add('fillPaymentCardholderName', (name = 'Test User') => {
   cy.wait(500);
 });
 
+Cypress.Commands.add('fillPaymentDetails', (opts = {}) => {
+  const { name = 'Test User', ...cardOpts } = opts;
+  cy.fillPaymentTestCard(cardOpts);
+  cy.fillPaymentCardholderName(name);
+});
+
 Cypress.Commands.add('fillPaymentTestCard', (opts = {}) => {
   const number = String(opts.number || '4242424242424242').replace(/\s/g, '');
   const cvv = opts.cvv || '123';
@@ -82,9 +88,10 @@ Cypress.Commands.add('fillStripeTestCard', (opts = {}) => {
   const cvv = opts.cvv || '123';
 
   const typeInIframe = (index, value) => {
+    // Stripe often mounts iframes with visibility:hidden; they are still used for input.
     cy.get('iframe[src*="js.stripe.com"]', { timeout: 20000 })
       .eq(index)
-      .should('be.visible')
+      .should('exist')
       .then(($iframe) => {
         const doc = $iframe[0].contentDocument;
         expect(doc, 'Stripe iframe document').not.to.be.null;
@@ -111,6 +118,16 @@ Cypress.Commands.add('fillStripeTestCard', (opts = {}) => {
   });
 });
 
+Cypress.Commands.add('clickPayNow', () => {
+  // Move focus away from card field so the card-number info tooltip does not block clicks.
+  cy.contains('ORDER SUMMARY', { timeout: 10000 }).click({ force: true });
+  cy.contains('button', 'PAY NOW', { timeout: 30000 })
+    .should('be.visible')
+    .scrollIntoView()
+    .should('not.be.disabled')
+    .click({ force: true });
+});
+
 Cypress.Commands.add('urlShouldIncludePurchaseSuccess', (timeout = 30000) => {
   cy.url({ timeout }).should((url) => {
     const ok =
@@ -126,8 +143,8 @@ Cypress.Commands.add('login', (email, password) => {
   cy.session([userEmail], () => {
     cy.visitDev('/auth');
     cy.wait(2000);
-    cy.get('#email').type(userEmail);
-    cy.get('input[type="password"]').type(userPassword);
+    cy.get('input[type="email"]').filter(':visible').first().clear().type(userEmail);
+    cy.get('input[type="password"]').filter(':visible').first().type(userPassword);
     cy.contains('button', 'LOG IN').click();
     cy.url({ timeout: 15000 }).should('not.include', '/auth');
   });
