@@ -1,7 +1,5 @@
 node_modules/
-cypress/screenshots/
-cypress/videos/
-cypress/downloads/
 .env
-cypress.env.json
-cypress/fixtures/users.json
+.auth/
+playwright-report/
+test-results/
