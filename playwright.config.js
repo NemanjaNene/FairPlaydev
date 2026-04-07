@@ -1,4 +1,15 @@
 const { defineConfig } = require('@playwright/test');
+const fs = require('fs');
+const path = require('path');
+
+let local = {};
+const envFile = path.resolve(__dirname, 'cypress.env.json');
+if (fs.existsSync(envFile)) {
+  local = JSON.parse(fs.readFileSync(envFile, 'utf8'));
+}
+
+process.env.TEST_USER_EMAIL = process.env.TEST_USER_EMAIL || local.testUserEmail || '';
+process.env.TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD || local.testUserPassword || '';
 
 module.exports = defineConfig({
   testDir: './tests',
@@ -11,8 +22,8 @@ module.exports = defineConfig({
   use: {
     baseURL: 'https://dev.yes-to-fairplay.com',
     httpCredentials: {
-      username: process.env.BASIC_AUTH_USER || '',
-      password: process.env.BASIC_AUTH_PASS || '',
+      username: process.env.BASIC_AUTH_USER || local.basicAuthUser || '',
+      password: process.env.BASIC_AUTH_PASS || local.basicAuthPass || '',
     },
     viewport: { width: 1920, height: 1080 },
     actionTimeout: 15000,

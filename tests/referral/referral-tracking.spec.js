@@ -46,8 +46,15 @@ test.describe('Referral Code Tracking', () => {
     expect(aidBefore).toBe(referralAid);
 
     await page.goto('/auth');
-    await page.locator('input[type="email"]').first().fill(process.env.TEST_USER_EMAIL || '');
-    await page.locator('input[type="password"]').first().fill(process.env.TEST_USER_PASSWORD || '');
+    await page.locator('input[type="email"]').first().waitFor({ state: 'visible' });
+    await page.waitForTimeout(1000);
+
+    await page.locator('input[type="email"]').first().click();
+    await page.locator('input[type="email"]').first().pressSequentially(process.env.TEST_USER_EMAIL || '', { delay: 30 });
+
+    await page.locator('input[type="password"]').first().click();
+    await page.locator('input[type="password"]').first().pressSequentially(process.env.TEST_USER_PASSWORD || '', { delay: 30 });
+
     await page.getByRole('button', { name: 'LOG IN' }).click();
     await expect(page).not.toHaveURL(/\/auth/, { timeout: 15000 });
 
@@ -70,12 +77,20 @@ test.describe('Referral Purchase - PAID Request Verification', () => {
     expect(aid).toBe(referralAid);
 
     await page.goto('/auth');
-    await page.locator('input[type="email"]').first().fill(process.env.TEST_USER_EMAIL || '');
-    await page.locator('input[type="password"]').first().fill(process.env.TEST_USER_PASSWORD || '');
+    await page.locator('input[type="email"]').first().waitFor({ state: 'visible' });
+    await page.waitForTimeout(1000);
+
+    await page.locator('input[type="email"]').first().click();
+    await page.locator('input[type="email"]').first().pressSequentially(process.env.TEST_USER_EMAIL || '', { delay: 30 });
+
+    await page.locator('input[type="password"]').first().click();
+    await page.locator('input[type="password"]').first().pressSequentially(process.env.TEST_USER_PASSWORD || '', { delay: 30 });
+
     await page.getByRole('button', { name: 'LOG IN' }).click();
     await expect(page).not.toHaveURL(/\/auth/, { timeout: 15000 });
 
     await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
 
     const paidRequestPromise = page.waitForRequest(
       (req) => req.method() === 'POST' && req.url().includes('paid'),
@@ -84,9 +99,8 @@ test.describe('Referral Purchase - PAID Request Verification', () => {
 
     await selectProductTab(page, 'DATA PACKAGES');
 
-    await page.getByText('20 GB').scrollIntoViewIfNeeded();
-    await page.getByText('20 GB').click({ force: true });
-    await page.getByText('BUY NOW').click();
+    await page.getByRole('radio', { name: /20 GB/ }).click();
+    await page.getByRole('button', { name: 'BUY NOW' }).click();
 
     await expect(page).toHaveURL(/\/payment/, { timeout: 15000 });
 
