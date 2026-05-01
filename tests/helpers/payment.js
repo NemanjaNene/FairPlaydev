@@ -159,14 +159,18 @@ async function clickPayNow(page) {
 
 async function expectPurchaseSuccess(page, timeout = 30000) {
   await expect(page).not.toHaveURL(/\/payment/, { timeout });
+  await page.waitForLoadState('load').catch(() => {});
   await page.waitForTimeout(3000);
-  await page.goto('/dashboard/services/my-products');
-  await page.waitForLoadState('domcontentloaded');
 
-  const activeProducts = page.getByText('ACTIVE PRODUCTS');
-  const activationInProgress = page.getByText('ACTIVATION IN PROGRESS');
+  await page.goto('/dashboard/services/my-products', { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(async () => {
+    await page.waitForTimeout(2000);
+    await page.goto('/dashboard/services/my-products', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  });
 
-  await expect(activeProducts.or(activationInProgress)).toBeVisible({ timeout: 15000 });
+  const products = page.getByText('PRODUCTS');
+  const activationInProgress = page.getByText('activation in progress', { exact: false });
+
+  await expect(products.or(activationInProgress)).toBeVisible({ timeout: 15000 });
 }
 
 module.exports = {

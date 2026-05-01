@@ -31,7 +31,7 @@ test.describe('Price Verification', () => {
 
   test.describe('FairPlay Unlimited Day Passes', () => {
     test.beforeEach(async ({ page }) => {
-      await selectProductTab(page, 'UNLIMITED');
+      await selectProductTab(page, 'DAY PASSES');
     });
 
     test('should display correct price for 3 Day Pass - €25', async ({ page }) => {

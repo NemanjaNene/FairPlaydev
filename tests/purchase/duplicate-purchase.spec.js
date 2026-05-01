@@ -8,7 +8,7 @@ test.describe('Duplicate Purchase Prevention', () => {
   });
 
   test('should show toast error when trying to buy second Unlimited plan', async ({ page }) => {
-    await selectProductTab(page, 'UNLIMITED');
+    await selectProductTab(page, 'DAY PASSES');
     await page.getByRole('radio', { name: /7 DAYS/ }).click();
     await page.getByRole('button', { name: 'BUY NOW' }).click();
 

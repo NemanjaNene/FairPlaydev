@@ -7,7 +7,7 @@ test.describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
-    await selectProductTab(page, 'UNLIMITED');
+    await selectProductTab(page, 'DAY PASSES');
     await page.getByRole('radio', { name: /7 DAYS/ }).click();
     await page.getByRole('button', { name: 'BUY NOW' }).click();
 
@@ -23,7 +23,7 @@ test.describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
-    await selectProductTab(page, 'UNLIMITED');
+    await selectProductTab(page, 'DAY PASSES');
     await page.getByRole('radio', { name: /7 DAYS/ }).click();
     await page.getByRole('button', { name: 'BUY NOW' }).click();
 
@@ -41,7 +41,7 @@ test.describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
-    await selectProductTab(page, 'UNLIMITED');
+    await selectProductTab(page, 'DAY PASSES');
     await page.getByRole('radio', { name: /7 DAYS/ }).click();
     await page.getByRole('button', { name: 'BUY NOW' }).click();
 
@@ -57,7 +57,7 @@ test.describe('Complete Purchase Flow - Unlimited Day Pass', () => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
-    await selectProductTab(page, 'UNLIMITED');
+    await selectProductTab(page, 'DAY PASSES');
     await page.getByRole('radio', { name: /7 DAYS/ }).click();
     await page.getByRole('button', { name: 'BUY NOW' }).click();
 

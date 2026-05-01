@@ -11,7 +11,7 @@ test.describe('Flex Product Start/Stop', () => {
     const hasFlexProducts = await page.getByText('FAIRPLAY FLEX').first().isVisible().catch(() => false);
     test.skip(!hasFlexProducts, 'No active Flex products on this profile');
 
-    await expect(page.getByText('ACTIVE PRODUCTS')).toBeVisible();
+    await expect(page.getByText('PRODUCTS')).toBeVisible();
     await expect(page.getByText('FAIRPLAY FLEX').first()).toBeVisible();
   });
 

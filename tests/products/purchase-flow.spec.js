@@ -9,7 +9,7 @@ test.describe('Purchase Flow', () => {
 
   test.describe('Day Pass Purchase', () => {
     test.beforeEach(async ({ page }) => {
-      await selectProductTab(page, 'UNLIMITED');
+      await selectProductTab(page, 'DAY PASSES');
     });
 
     test('should show BUY NOW button when selecting 7 Day Pass', async ({ page }) => {

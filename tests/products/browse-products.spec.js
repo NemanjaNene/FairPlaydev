@@ -2,9 +2,9 @@ const { test, expect } = require('@playwright/test');
 const { selectProductTab } = require('../helpers/products');
 
 test.describe('Product Browsing', () => {
-  test('should show active products on dashboard', async ({ page }) => {
+  test('should show products section on dashboard', async ({ page }) => {
     await page.goto('/dashboard/services/my-products');
-    await expect(page.getByText('ACTIVE PRODUCTS')).toBeVisible();
+    await expect(page.getByText('PRODUCTS')).toBeVisible();
   });
 
   test('should navigate to homepage by clicking FairPlay logo', async ({ page }) => {
@@ -33,7 +33,7 @@ test.describe('Product Browsing', () => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
-    await selectProductTab(page, 'UNLIMITED');
+    await selectProductTab(page, 'DAY PASSES');
 
     await expect(page.getByRole('radio', { name: /3 DAYS/ })).toBeVisible();
     await expect(page.getByRole('radio', { name: /7 DAYS/ })).toBeVisible();

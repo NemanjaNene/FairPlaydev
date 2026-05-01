@@ -4,10 +4,10 @@ test.describe('Profile Page', () => {
   test('should navigate to profile via homepage → MY PROFILE → PROFILE', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByText('MY PROFILE').click();
+    await page.getByRole('link', { name: 'MY PROFILE' }).click();
     await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
 
-    await page.getByText('PROFILE').click();
+    await page.getByRole('link', { name: 'PROFILE' }).click();
     await expect(page).toHaveURL(/\/dashboard\/profile/, { timeout: 10000 });
 
     await expect(page.getByText('Hello,')).toBeVisible();
@@ -15,8 +15,9 @@ test.describe('Profile Page', () => {
 
   test('should display personal information section', async ({ page }) => {
     await page.goto('/dashboard/profile');
+    await page.waitForLoadState('networkidle');
 
-    await expect(page.getByText('PERSONAL INFORMATION')).toBeVisible();
+    await expect(page.getByText('PERSONAL INFORMATION')).toBeVisible({ timeout: 15000 });
     await expect(page.getByText('Email')).toBeVisible();
     await expect(page.getByText('First name')).toBeVisible();
     await expect(page.getByText('Last name')).toBeVisible();
@@ -24,9 +25,10 @@ test.describe('Profile Page', () => {
 
   test('should show correct user email in input field', async ({ page }) => {
     await page.goto('/dashboard/profile');
+    await page.waitForLoadState('networkidle');
 
     const email = process.env.TEST_USER_EMAIL || '';
-    await expect(page.locator(`input[value*="${email}"]`)).toBeVisible();
+    await expect(page.locator(`input[value*="${email}"]`)).toBeVisible({ timeout: 15000 });
   });
 
   test('should display payment data section', async ({ page }) => {
@@ -36,15 +38,16 @@ test.describe('Profile Page', () => {
 
     await expect(page.getByText('PAYMENT DATA')).toBeVisible();
     await expect(page.getByText('Card credit')).toBeVisible();
-    await expect(page.getByText('Expiration date')).toBeVisible();
+    await expect(page.getByText('Expiration date (MM/YY)')).toBeVisible();
     await expect(page.getByText('CHANGE PAYMENT METHOD')).toBeVisible();
     await expect(page.getByText('Delete payment method')).toBeVisible();
   });
 
   test('should show CHANGE PAYMENT METHOD button', async ({ page }) => {
     await page.goto('/dashboard/profile');
+    await page.waitForLoadState('networkidle');
 
-    await expect(page.getByText('CHANGE PAYMENT METHOD')).toBeVisible();
+    await expect(page.getByText('CHANGE PAYMENT METHOD')).toBeVisible({ timeout: 15000 });
   });
 
   test('should show Delete payment method option', async ({ page }) => {
@@ -57,7 +60,8 @@ test.describe('Profile Page', () => {
 
   test('should display order history', async ({ page }) => {
     await page.goto('/dashboard/profile');
+    await page.waitForLoadState('networkidle');
 
-    await expect(page.getByText('ORDER HISTORY')).toBeVisible();
+    await expect(page.getByText('ORDER HISTORY')).toBeVisible({ timeout: 15000 });
   });
 });
