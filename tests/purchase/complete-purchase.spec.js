@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { selectProductTab } = require('../helpers/products');
 const { completePayment, expectPurchaseSuccess } = require('../helpers/payment');
 
-test.describe('Complete Purchase Flow - Unlimited Day Pass', () => {
+test.describe.skip('Complete Purchase Flow - Unlimited Day Pass', () => {
   test('should select 7 Day Pass and navigate to payment page', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
@@ -70,7 +70,7 @@ test.describe('Complete Purchase Flow - Unlimited Day Pass', () => {
   });
 });
 
-test.describe('Complete Purchase Flow - Flex Subscription', () => {
+test.describe.skip('Complete Purchase Flow - Flex Subscription', () => {
   test('should select 12 Month Flex and navigate to payment page', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');

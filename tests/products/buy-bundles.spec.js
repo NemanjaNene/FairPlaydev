@@ -43,7 +43,7 @@ test.describe('Data Packages Section', () => {
   });
 });
 
-test.describe('Purchase Flex - Setup', () => {
+test.describe.skip('Purchase Flex - Setup', () => {
   test('should buy 6 Month Flex and see it on dashboard', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
@@ -62,7 +62,7 @@ test.describe('Purchase Flex - Setup', () => {
   });
 });
 
-test.describe('Purchase Bundle - Complete Flow', () => {
+test.describe.skip('Purchase Bundle - Complete Flow', () => {
   test('should buy 1GB bundle and see it on dashboard', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');

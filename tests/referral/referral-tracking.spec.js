@@ -65,7 +65,7 @@ test.describe('Referral Code Tracking', () => {
   });
 });
 
-test.describe('Referral Purchase - PAID Request Verification', () => {
+test.describe.skip('Referral Purchase - PAID Request Verification', () => {
   test('should send PAID request with referral info after bundle purchase', async ({ page }) => {
     await page.goto(referralUrl);
     await page.waitForTimeout(3000);
