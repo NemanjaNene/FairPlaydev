@@ -1,6 +1,5 @@
 const { test, expect } = require('@playwright/test');
 const { selectProductTab } = require('../helpers/products');
-const { completePayment, expectPurchaseSuccess } = require('../helpers/payment');
 
 test.describe('Data Packages Section', () => {
   test.beforeEach(async ({ page }) => {
@@ -40,43 +39,5 @@ test.describe('Data Packages Section', () => {
   test('should show BUY NOW when selecting a bundle', async ({ page }) => {
     await page.getByRole('radio', { name: /1 GB/ }).click();
     await expect(page.getByRole('button', { name: 'BUY NOW' })).toBeVisible();
-  });
-});
-
-test.describe.skip('Purchase Flex - Setup', () => {
-  test('should buy 6 Month Flex and see it on dashboard', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('domcontentloaded');
-
-    await selectProductTab(page, 'FAIRPLAY FLEX');
-
-    await page.getByRole('radio', { name: /6 MONTH/ }).click();
-    await page.getByRole('button', { name: 'BUY NOW' }).click();
-
-    await page.waitForTimeout(5000);
-    test.skip(!page.url().includes('/payment'), '6M Flex already exists on this profile');
-
-    await completePayment(page);
-
-    await expectPurchaseSuccess(page);
-  });
-});
-
-test.describe.skip('Purchase Bundle - Complete Flow', () => {
-  test('should buy 1GB bundle and see it on dashboard', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('domcontentloaded');
-
-    await selectProductTab(page, 'DATA PACKAGES');
-
-    await page.getByRole('radio', { name: /1 GB/ }).click();
-    await page.getByRole('button', { name: 'BUY NOW' }).click();
-
-    await expect(page).toHaveURL(/\/payment/, { timeout: 15000 });
-
-    await completePayment(page);
-
-    await expectPurchaseSuccess(page);
-    await expect(page.getByText(/1\s*GB/i).first()).toBeVisible();
   });
 });
